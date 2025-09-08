@@ -66,18 +66,30 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return Scaffold(
       backgroundColor: ColorConstants.background,
       appBar: AppBar(
+        // Gradient background
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                ColorConstants.primaryBlue.withOpacity(0.8),
+                ColorConstants.primaryOrange.withOpacity(0.8),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         title: Text(
           TextConstants.categories,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            color: Colors.white,
             fontWeight: FontWeight.bold,
-            color: ColorConstants.textPrimary,
           ),
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
       ),
       body: CustomScrollView(
         slivers: [
+          // 🔹 Search field
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -105,6 +117,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               ),
             ),
           ),
+
+          // 🔹 Promo banners
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -126,7 +140,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               ),
             ),
           ),
+
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
+          // 🔹 Category grid or "No categories" message
           _filteredCategories.isEmpty
               ? SliverFillRemaining(
             hasScrollBody: false,

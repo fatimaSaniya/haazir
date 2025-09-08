@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import '../../../constants/color_constants.dart';
+import '../../../constants/text_constants.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
@@ -8,253 +10,267 @@ class BookingScreen extends StatefulWidget {
   State<BookingScreen> createState() => _BookingScreenState();
 }
 
-class _BookingScreenState extends State<BookingScreen> {
-  String? _selectedService;
-  String? _selectedSlot;
-  DateTime? _selectedDate;
+class _BookingScreenState extends State<BookingScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
 
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _notesController = TextEditingController();
-
-  final List<String> _services = [
-    "Cleaner",
-    "Plumber",
-    "Electrician",
-    "Chef",
-    "Painter",
+  static final List<Map<String, dynamic>> _upcomingBookings = [
+    {
+      "service": "Kitchen Cleaning",
+      "date": "Sep 5, 2025",
+      "time": "10:00 AM",
+      "status": "Confirmed",
+      "price": "₹499",
+      "icon": "assets/images/cleaning.json",
+    },
+    {
+      "service": "Plumber Visit",
+      "date": "Sep 8, 2025",
+      "time": "4:00 PM",
+      "status": "Pending",
+      "price": "₹299",
+      "icon": "assets/images/plumber.png",
+    },
   ];
 
-  final List<String> _slots = [
-    "9:00 AM - 11:00 AM",
-    "11:00 AM - 1:00 PM",
-    "2:00 PM - 4:00 PM",
-    "4:00 PM - 6:00 PM",
-    "6:00 PM - 8:00 PM",
+  static final List<Map<String, dynamic>> _pastBookings = [
+    {
+      "service": "Sofa Cleaning",
+      "date": "Aug 20, 2025",
+      "time": "1:00 PM",
+      "status": "Completed",
+      "price": "₹799",
+      "icon": "assets/images/cleaning.json",
+    },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorConstants.background,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(75),
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [ColorConstants.primaryBlue, ColorConstants.primaryOrange],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(24),
-            ),
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Left side: greeting + title
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 4),
-                      Text(
-                        "Book Your Service",
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              // 🔹 Gradient Header
+              Container(
+                padding: const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorConstants.primaryBlue.withOpacity(0.7),
+                      ColorConstants.primaryOrange.withOpacity(0.7),
                     ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-
-                  // Right side: user avatar / lottie
-                  const CircleAvatar(
-                    radius: 24,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person, color: ColorConstants.primaryBlue),
-                    // later: replace with user profile image
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _sectionTitle("Select Service"),
-            _cardWrapper(
-              DropdownButtonFormField<String>(
-                value: _selectedService,
-                items: _services
-                    .map((s) =>
-                    DropdownMenuItem(value: s, child: Text(s)))
-                    .toList(),
-                onChanged: (val) => setState(() => _selectedService = val),
-                decoration: const InputDecoration.collapsed(hintText: ""),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            _sectionTitle("Select Date"),
-            InkWell(
-              onTap: () async {
-                final picked = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now().add(const Duration(days: 1)),
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime.now().add(const Duration(days: 30)),
-                );
-                if (picked != null) setState(() => _selectedDate = picked);
-              },
-              child: _cardWrapper(
-                Text(
-                  _selectedDate == null
-                      ? "Choose a date"
-                      : "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}",
-                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            _sectionTitle("Select Time Slot"),
-            SizedBox(
-              height: 50,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: _slots.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 12),
-                itemBuilder: (context, index) {
-                  final slot = _slots[index];
-                  final isSelected = _selectedSlot == slot;
-                  return GestureDetector(
-                    onTap: () => setState(() => _selectedSlot = slot),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? ColorConstants.primaryBlue.withOpacity(0.1)
-                            : ColorConstants.cardBackground,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isSelected
-                              ? ColorConstants.primaryBlue
-                              : ColorConstants.border,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          slot,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: isSelected
-                                ? ColorConstants.primaryBlue
-                                : ColorConstants.textSecondary,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            TextConstants.myBookings,
+                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 6),
+                          Text(
+                            "Track your upcoming & past services",
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            _sectionTitle("Address"),
-            _cardWrapper(
-              TextField(
-                controller: _addressController,
-                maxLines: 2,
-                decoration: const InputDecoration.collapsed(
-                    hintText: "Enter your address"),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            _sectionTitle("Special Instructions"),
-            _cardWrapper(
-              TextField(
-                controller: _notesController,
-                maxLines: 2,
-                decoration: const InputDecoration.collapsed(
-                    hintText: "Any specific request?"),
-              ),
-            ),
-            const SizedBox(height: 30),
-
-            // Confirm Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  backgroundColor: ColorConstants.primaryBlue,
+                    Lottie.asset("assets/images/calendar.json", height: 60),
+                  ],
                 ),
-                onPressed: () {
-                  // TODO: Hook to API
-                  debugPrint("Service: $_selectedService");
-                  debugPrint("Date: $_selectedDate");
-                  debugPrint("Slot: $_selectedSlot");
-                  debugPrint("Address: ${_addressController.text}");
-                  debugPrint("Notes: ${_notesController.text}");
-                },
-                child: Text(
-                  "Confirm Booking",
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+
+              // 🔹 Tabs
+              TabBar(
+                controller: _tabController,
+                labelColor: ColorConstants.primaryBlue,
+                unselectedLabelColor: ColorConstants.textSecondary,
+                indicatorColor: ColorConstants.primaryOrange,
+                tabs: const [
+                  Tab(text: "Upcoming"),
+                  Tab(text: "Past"),
+                ],
+              ),
+
+              // 🔹 Tab Content with fixed height
+              SizedBox(
+                height: MediaQuery.of(context).size.height -
+                    50 - // top padding of header
+                    20 - // bottom padding of header
+                    60 - // estimated height of TabBar
+                    200, // optional extra space if needed for safe area / margins
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildBookingList(_upcomingBookings),
+                    _buildBookingList(_pastBookings),
+                  ],
                 ),
+              ),
+            ],
+          ),
+        ),
+    );
+  }
+
+  Widget _buildBookingList(List<Map<String, dynamic>> bookings) {
+    if (bookings.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset("assets/images/no_bookings.json", height: 180),
+            const SizedBox(height: 12),
+            Text(
+              "No bookings yet",
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: ColorConstants.textSecondary,
               ),
             ),
           ],
         ),
-      ),
+      );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: bookings.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        final item = bookings[index];
+        final isJson = item["icon"].toString().endsWith(".json");
+
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                ColorConstants.softBlue.withOpacity(0.4),
+                ColorConstants.softOrange.withOpacity(0.4),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 6,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: isJson
+                    ? Lottie.asset(item["icon"], fit: BoxFit.contain)
+                    : Image.asset(item["icon"], fit: BoxFit.contain),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item["service"],
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: ColorConstants.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "${item["date"]} • ${item["time"]}",
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: ColorConstants.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    item["price"],
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: ColorConstants.primaryOrange,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  _StatusChip(status: item["status"]),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
+}
 
-  // 🔹 Helpers for consistent styling
-  Widget _sectionTitle(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+// 🔹 Status Chip Widget
+class _StatusChip extends StatelessWidget {
+  final String status;
+
+  const _StatusChip({required this.status});
+
+  Color _getColor() {
+    switch (status) {
+      case "Confirmed":
+        return ColorConstants.success;
+      case "Pending":
+        return ColorConstants.primaryBlue;
+      case "Completed":
+        return Colors.grey;
+      case "Cancelled":
+        return Colors.red;
+      default:
+        return ColorConstants.textSecondary;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: _getColor().withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Text(
-        text,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: ColorConstants.textPrimary,
+        status,
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: _getColor(),
+          fontWeight: FontWeight.w600,
         ),
       ),
-    );
-  }
-
-  Widget _cardWrapper(Widget child) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: ColorConstants.cardBackground,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: ColorConstants.border),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: child,
     );
   }
 }

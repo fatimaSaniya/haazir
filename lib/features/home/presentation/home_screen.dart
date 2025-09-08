@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../constants/color_constants.dart';
 import '../../../constants/text_constants.dart';
@@ -13,40 +14,44 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Scaffold background uses the soft orangish tint from ColorConstants
     return Scaffold(
       backgroundColor: ColorConstants.background,
       appBar: AppBar(
-        backgroundColor: ColorConstants.softOrange,
-        elevation: 0,
+        // Gradient background
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                ColorConstants.primaryBlue.withOpacity(0.8),
+                ColorConstants.primaryOrange.withOpacity(0.8),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         title: Text(
           TextConstants.greeting,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: ColorConstants.textPrimary,
-            fontWeight: FontWeight.w600,
-          ),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold,),
         ),
         actions: [
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.notifications_none_rounded),
-            color: ColorConstants.textPrimary,
+            color: Colors.white,
           ),
-          const SizedBox(width: 8),
         ],
+        elevation: 0,
+        backgroundColor: Colors.transparent, // so gradient shows
       ),
-
-      // Everything scrolls — prevents RenderFlex overflow
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // SEARCH + ROTATING SUGGESTIONS
             const _SearchArea(),
             const SizedBox(height: 20),
 
-            // SERVICES GRID
             Text(
               TextConstants.serviceTitle,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -55,10 +60,9 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            const ServiceGrid(), // uses your images
+            const ServiceGrid(),
             const SizedBox(height: 20),
 
-            // TRENDING (horizontal scroll)
             Text(
               TextConstants.trendingTitle,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -70,7 +74,6 @@ class HomeScreen extends StatelessWidget {
             const TrendingServices(),
             const SizedBox(height: 20),
 
-            // MOST LIKED
             Text(
               TextConstants.mostLikedTitle,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -82,11 +85,9 @@ class HomeScreen extends StatelessWidget {
             const MostLikedServices(),
             const SizedBox(height: 20),
 
-            // BIG OFFER CARD
             const OffersCard(),
             const SizedBox(height: 20),
 
-            // REFER & EARN
             const ReferEarnCard(),
             const SizedBox(height: 24),
           ],
@@ -96,7 +97,6 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-/// Search area with a search text field and the rotating suggestion below it
 class _SearchArea extends StatelessWidget {
   const _SearchArea();
 
@@ -105,7 +105,6 @@ class _SearchArea extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Search box
         Container(
           decoration: BoxDecoration(
             color: ColorConstants.cardBackground,
@@ -127,17 +126,14 @@ class _SearchArea extends StatelessWidget {
             ),
           ),
         ),
-
         const SizedBox(height: 8),
-
-        // Rotating suggestions ticker (auto changes)
         const SizedBox(
           height: 20,
           child: Row(
             children: [
               Icon(Icons.flash_on, size: 18, color: ColorConstants.primaryOrange),
               SizedBox(width: 8),
-              Expanded(child: SuggestionTicker()), // custom widget cycles through TextConstants.serviceSuggestions
+              Expanded(child: SuggestionTicker()),
             ],
           ),
         ),

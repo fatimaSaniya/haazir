@@ -1,7 +1,7 @@
 class TextConstants {
   static const String greeting = "Haazir - For Your Comfort";
   static const String searchHint = "Search for services";
-  static const String booking = "Booking";
+  static const String myBookings = "My Booking";
 
   static const List<String> serviceSuggestions = [
     "Kitchen Cleaning",
