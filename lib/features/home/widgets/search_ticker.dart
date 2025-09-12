@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../../../constants/text_constants.dart';
 import '../../../constants/color_constants.dart';
+import '../../../constants/string_constants.dart';
 
 class SuggestionTicker extends StatefulWidget {
   const SuggestionTicker({super.key});
@@ -19,7 +19,7 @@ class _SuggestionTickerState extends State<SuggestionTicker> {
     super.initState();
     _timer = Timer.periodic(const Duration(seconds: 2), (_) {
       setState(() {
-        _index = (_index + 1) % TextConstants.serviceSuggestions.length;
+        _index = (_index + 1) % StringConstants.serviceSuggestions.length;
       });
     });
   }
@@ -32,7 +32,7 @@ class _SuggestionTickerState extends State<SuggestionTicker> {
 
   @override
   Widget build(BuildContext context) {
-    final text = TextConstants.serviceSuggestions[_index];
+    final text = StringConstants.serviceSuggestions[_index];
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 350),
       child: Text(

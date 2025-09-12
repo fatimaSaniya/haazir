@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haazir/constants/image_constant.dart';
 import 'package:lottie/lottie.dart';
 import '../../../constants/color_constants.dart';
 
@@ -6,9 +7,9 @@ class MostLikedServices extends StatelessWidget {
   const MostLikedServices({super.key});
 
   static final List<Map<String, dynamic>> _items = [
-    {"name": "Full-time Maid", "rating": 4.9, "image": "assets/images/cleaning.json"},
-    {"name": "Babysitting", "rating": 4.8, "image": "assets/images/Baby.json"},
-    {"name": "Chef", "rating": 4.7, "image": "assets/images/kitchen.json"}, // fallback icon
+    {"name": "Full-time Maid", "rating": 4.9, "image": ImageConstants.cleaningAnimation},
+    {"name": "Babysitting", "rating": 4.8, "image": ImageConstants.babyAnimation},
+    {"name": "Chef", "rating": 4.7, "image": ImageConstants.kitchenAnimation}, // fallback icon
   ];
 
   @override

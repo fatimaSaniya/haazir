@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../constants/color_constants.dart';
+import '../../../constants/image_constant.dart';
+import '../../../constants/string_constants.dart';
 import '../../../constants/text_constants.dart';
 
 class CategoriesScreen extends StatefulWidget {
@@ -16,12 +18,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   Timer? _autoScrollTimer;
 
   static final List<Map<String, String>> _allCategories = [
-    {"name": "Painter", "tagline": "Give walls life", "icon": "assets/images/hazeer_lady.png"},
-    {"name": "Cleaner", "tagline": "Sparkling homes", "icon": "assets/images/cleaner.png"},
-    {"name": "Plumber", "tagline": "Fix leaks instantly", "icon": "assets/images/plumber.png"},
-    {"name": "Chef", "tagline": "Taste at home", "icon": "assets/images/veg_sheif_boy.png"},
-    {"name": "Electrician", "tagline": "Power solutions", "icon": "assets/images/boy_chef.png"},
-    {"name": "Beauty Salon", "tagline": "Style & Grooming", "icon": "assets/images/spa.png"},
+    {"name": "Painter", "tagline": "Give walls life", "icon": ImageConstants.hazeerLady},
+    {"name": "Cleaner", "tagline": "Sparkling homes", "icon": ImageConstants.cleanerIcon},
+    {"name": "Plumber", "tagline": "Fix leaks instantly", "icon": ImageConstants.plumberIcon},
+    {"name": "Chef", "tagline": "Taste at home", "icon": ImageConstants.vegChefBoy},
+    {"name": "Electrician", "tagline": "Power solutions", "icon": ImageConstants.electricianIcon},
+    {"name": "Beauty Salon", "tagline": "Style & Grooming", "icon": ImageConstants.spaIcon},
   ];
 
   late List<Map<String, String>> _filteredCategories;
@@ -66,7 +68,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return Scaffold(
       backgroundColor: ColorConstants.background,
       appBar: AppBar(
-        // Gradient background
+        centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -80,7 +82,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ),
         ),
         title: Text(
-          TextConstants.categories,
+          StringConstants.categories,
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -108,7 +110,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 child: TextField(
                   controller: _searchController,
                   decoration: const InputDecoration(
-                    hintText: "Search categories...",
+                    hintText: StringConstants.searchCategoriesHint,
                     prefixIcon: Icon(Icons.search, color: ColorConstants.textSecondary),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(14),
@@ -128,12 +130,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   controller: _pageController,
                   children: const [
                     _PromoBanner(
-                      title: "Get 20% OFF",
-                      subtitle: "On your first booking",
+                      title: StringConstants.promoFirstBookingTitle,
+                      subtitle: StringConstants.promoFirstBookingSubtitle,
                     ),
                     _PromoBanner(
-                      title: "Refer & Earn",
-                      subtitle: "Invite friends and get rewards",
+                      title: StringConstants.promoReferTitle,
+                      subtitle: StringConstants.promoReferSubtitle,
                     ),
                   ],
                 ),
@@ -143,21 +145,16 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
-          // 🔹 Category grid or "No categories" message
+          // 🔹 Category grid or empty state
           _filteredCategories.isEmpty
-              ? SliverFillRemaining(
+              ? const SliverFillRemaining(
             hasScrollBody: false,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.search_off, size: 100, color: ColorConstants.textSecondary),
-                const SizedBox(height: 16),
-                Text(
-                  "No categories found",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: ColorConstants.textSecondary,
-                  ),
-                ),
+                Icon(Icons.search_off, size: 100, color: ColorConstants.textSecondary),
+                SizedBox(height: 16),
+                Text(StringConstants.noCategoriesFound, style: TextConstants.emptyState),
               ],
             ),
           )
@@ -223,22 +220,9 @@ class _CategoryCard extends StatelessWidget {
         children: [
           Expanded(child: Image.asset(icon, fit: BoxFit.contain)),
           const SizedBox(height: 6),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: ColorConstants.textPrimary,
-            ),
-          ),
+          Text(title, textAlign: TextAlign.center, style: TextConstants.sectionTitle),
           const SizedBox(height: 3),
-          Text(
-            tagline,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: ColorConstants.textSecondary,
-            ),
-          ),
+          Text(tagline, textAlign: TextAlign.center, style: TextConstants.subtitle),
         ],
       ),
     );
@@ -276,16 +260,9 @@ class _PromoBanner extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: ColorConstants.textPrimary,
-                      )),
+                  Text(title, style: TextConstants.sectionTitle),
                   const SizedBox(height: 6),
-                  Text(subtitle,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: ColorConstants.textSecondary,
-                      )),
+                  Text(subtitle, style: TextConstants.subtitle),
                 ],
               ),
             ),

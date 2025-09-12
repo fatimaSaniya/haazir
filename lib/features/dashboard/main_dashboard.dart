@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../constants/color_constants.dart';
+import '../../constants/string_constants.dart';
 
 class MainDashboard extends StatefulWidget {
   final Widget child; // dynamic screen
@@ -57,22 +58,22 @@ class _MainDashboardState extends State<MainDashboard> {
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
               activeIcon: Icon(Icons.home_rounded),
-              label: "Home",
+              label: StringConstants.navHome,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.grid_view_outlined),
               activeIcon: Icon(Icons.grid_view_rounded),
-              label: "Categories",
+              label: StringConstants.navCategories,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today_outlined),
               activeIcon: Icon(Icons.calendar_today_rounded),
-              label: "Booking",
+              label: StringConstants.navBooking,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_outline),
               activeIcon: Icon(Icons.person_rounded),
-              label: "Profile",
+              label: StringConstants.navProfile,
             ),
           ],
         ),

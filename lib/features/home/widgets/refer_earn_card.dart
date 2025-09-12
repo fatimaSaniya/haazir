@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../constants/color_constants.dart';
-import '../../../constants/text_constants.dart';
+import '../../../constants/string_constants.dart';
 
 class ReferEarnCard extends StatelessWidget {
   const ReferEarnCard({super.key});
@@ -20,7 +20,7 @@ class ReferEarnCard extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              TextConstants.referTitle,
+              StringConstants.referTitle,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: ColorConstants.textPrimary,
                 fontWeight: FontWeight.w700,

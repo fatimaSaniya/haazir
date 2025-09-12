@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+/// 🎨 Centralized color palette for the app
 class ColorConstants {
   // Brand
   static const Color primaryBlue = Color(0xFF2563EB);
@@ -16,9 +18,11 @@ class ColorConstants {
   static const Color textPrimary = Color(0xFF111827);
   static const Color textSecondary = Color(0xFF6B7280);
 
-  // Borders / subtle
+  // Borders
   static const Color border = Color(0xFFE5E7EB);
 
-  // Semantic
-  static const Color success = Color(0xFF10B981); // green
+  // Semantic Colors
+  static const Color success = Color(0xFF10B981);
+  static const Color error = Color(0xFFEF4444);
+  static const Color warning = Color(0xFFF59E0B);
 }

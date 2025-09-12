@@ -1,22 +1,40 @@
+import 'package:flutter/material.dart';
+import 'color_constants.dart';
+
+/// ✨ Reusable custom text styles (beyond global theme)
 class TextConstants {
-  static const String greeting = "Haazir - For Your Comfort";
-  static const String searchHint = "Search for services";
-  static const String myBookings = "My Booking";
-  static const String profile = "Profile";
+  // Section Headers
+  static const TextStyle sectionTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: ColorConstants.textPrimary,
+  );
 
-  static const List<String> serviceSuggestions = [
-    "Kitchen Cleaning",
-    "Babysitting",
-    "Sofa Cleaning",
-    "Full-time Maid",
-    "Home Cleaning",
-    "AC Service",
-  ];
+  // Subtitles / Descriptions
+  static const TextStyle subtitle = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: ColorConstants.textSecondary,
+  );
 
-  static const String serviceTitle = "Our Services";
-  static const String trendingTitle = "Trending Services";
-  static const String mostLikedTitle = "Most Liked by Users";
-  static const String offersTitle = "Special Offers";
-  static const String referTitle = "Refer & Earn Free Services";
-  static const String categories = "Categories";
+  // Chip Labels
+  static const TextStyle chipLabel = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: ColorConstants.textPrimary,
+  );
+
+  // Price Highlight
+  static const TextStyle price = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.bold,
+    color: ColorConstants.primaryOrange,
+  );
+
+  // Empty State Text
+  static const TextStyle emptyState = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: ColorConstants.textSecondary,
+  );
 }

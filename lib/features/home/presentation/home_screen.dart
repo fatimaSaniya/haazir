@@ -1,7 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../constants/color_constants.dart';
-import '../../../constants/text_constants.dart';
+import '../../../constants/string_constants.dart';
 import '../widgets/service_grid.dart';
 import '../widgets/trending_services.dart';
 import '../widgets/most_liked_services.dart';
@@ -17,6 +16,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: ColorConstants.background,
       appBar: AppBar(
+        centerTitle: true,
         // Gradient background
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          TextConstants.greeting,
+          StringConstants.greeting,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold,),
         ),
         actions: [
@@ -53,7 +53,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             Text(
-              TextConstants.serviceTitle,
+              StringConstants.serviceTitle,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: ColorConstants.textPrimary,
                 fontWeight: FontWeight.w600,
@@ -64,7 +64,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             Text(
-              TextConstants.trendingTitle,
+              StringConstants.trendingTitle,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: ColorConstants.textPrimary,
                 fontWeight: FontWeight.w600,
@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             Text(
-              TextConstants.mostLikedTitle,
+              StringConstants.mostLikedTitle,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: ColorConstants.textPrimary,
                 fontWeight: FontWeight.w600,
@@ -120,7 +120,7 @@ class _SearchArea extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: const TextField(
             decoration: InputDecoration(
-              hintText: TextConstants.searchHint,
+              hintText: StringConstants.searchHint,
               border: InputBorder.none,
               prefixIcon: Icon(Icons.search),
             ),

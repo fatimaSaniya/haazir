@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../constants/color_constants.dart';
-import '../../../constants/text_constants.dart';
+import '../../../constants/string_constants.dart';
 
 class OffersCard extends StatelessWidget {
   const OffersCard({super.key});
@@ -29,7 +29,7 @@ class OffersCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  TextConstants.offersTitle,
+                  StringConstants.offersTitle,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w800,

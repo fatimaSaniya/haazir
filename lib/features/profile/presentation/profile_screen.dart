@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import '../../../constants/color_constants.dart';
-import '../../../constants/text_constants.dart';
+import '../../../constants/string_constants.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -27,7 +27,7 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          TextConstants.profile, // add this in your TextConstants
+          StringConstants.profile, // add this in your TextConstants
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -100,7 +100,7 @@ class ProfileScreen extends StatelessWidget {
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   foregroundColor: ColorConstants.primaryBlue,
-                  side: BorderSide(color: ColorConstants.primaryBlue),
+                  side: const BorderSide(color: ColorConstants.primaryBlue),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
