@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import '../../../constants/color_constants.dart';
-import '../../../constants/image_constant.dart';
-import '../../../constants/string_constants.dart';
-import '../../../constants/text_constants.dart';
+import '../../constants/color_constants.dart';
+import '../../constants/image_constant.dart';
+import '../../constants/string_constants.dart';
+import '../../constants/text_constants.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});

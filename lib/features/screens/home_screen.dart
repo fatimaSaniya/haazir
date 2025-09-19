@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../constants/color_constants.dart';
-import '../../../constants/string_constants.dart';
-import '../widgets/service_grid.dart';
-import '../widgets/trending_services.dart';
+import '../../constants/color_constants.dart';
+import '../../constants/string_constants.dart';
 import '../widgets/most_liked_services.dart';
 import '../widgets/offers_card.dart';
 import '../widgets/refer_earn_card.dart';
 import '../widgets/search_ticker.dart';
+import '../widgets/service_grid.dart';
+import '../widgets/trending_services.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

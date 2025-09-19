@@ -1,10 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:haazir/features/Dashboard/main_dashboard.dart';
-import '../../features/Booking/presentation/booking_screen.dart';
-import '../../features/Profile/presentation/profile_screen.dart';
-import '../../features/home/presentation/home_screen.dart';
-import '../../features/categories/presentation/categories_screen.dart';
+import '../../features/screens/booking_screen.dart';
+import '../../features/screens/main_dashboard.dart';
+import '../../features/screens/profile_screen.dart';
+import '../../features/screens/categories_screen.dart';
+import '../../features/screens/home_screen.dart';
+import '../../features/screens/login_screen.dart';
+import '../../features/screens/register_screen.dart';
+
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -31,6 +34,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/profile',
             builder: (context, state) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: '/login',
+            builder: (context, state) => const LoginScreen(),
+          ),
+          GoRoute(
+            path: '/register',
+            builder: (context, state) => const RegisterScreen(),
           ),
         ],
       ),

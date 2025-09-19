@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:haazir/features/screens/register_screen.dart';
 import 'package:lottie/lottie.dart';
-import '../../../constants/color_constants.dart';
-import '../../../constants/string_constants.dart';
+import '../../constants/color_constants.dart';
+import '../../constants/string_constants.dart';
+import '../auth/providers/auth_provider.dart';
+import 'login_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
-  final bool isLoggedIn = true; // 🔹 replace with real auth state later
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authUserProvider); // null if not logged in
+
     return Scaffold(
       backgroundColor: ColorConstants.background,
       appBar: AppBar(
-        // Gradient AppBar (from your style)
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -27,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          StringConstants.profile, // add this in your TextConstants
+          StringConstants.profile,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -43,14 +46,11 @@ class ProfileScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-
-      body: isLoggedIn
-          ? _buildLoggedIn(context)
-          : _buildGuest(context), // 🔹 show correct state
+      body: user == null ? _buildGuest(context) : _buildLoggedIn(context, ref, user),
     );
   }
 
-  // 🔹 Guest / Not Logged In
+  // 🔹 Guest (not logged in)
   Widget _buildGuest(BuildContext context) {
     return Center(
       child: Padding(
@@ -78,7 +78,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            // Buttons
+            // Login Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -86,15 +86,21 @@ class ProfileScreen extends StatelessWidget {
                   backgroundColor: ColorConstants.primaryOrange.withOpacity(0.7),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 onPressed: () {
-                  // Navigate to Login
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  );
                 },
-                child: const Text("Login", style: TextStyle(fontSize: 16),),
+                child: const Text("Login", style: TextStyle(fontSize: 16)),
               ),
             ),
             const SizedBox(height: 12),
+
+            // Sign Up Button
             SizedBox(
               width: double.infinity,
               child: OutlinedButton(
@@ -103,10 +109,14 @@ class ProfileScreen extends StatelessWidget {
                   side: const BorderSide(color: ColorConstants.primaryBlue),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 onPressed: () {
-                  // Navigate to Sign Up
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                  );
                 },
                 child: const Text("Sign Up"),
               ),
@@ -118,44 +128,52 @@ class ProfileScreen extends StatelessWidget {
   }
 
   // 🔹 Logged In
-  Widget _buildLoggedIn(BuildContext context) {
+  Widget _buildLoggedIn(BuildContext context, WidgetRef ref, Map<String, dynamic> user) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          // User avatar + info
-          const CircleAvatar(
+          CircleAvatar(
             radius: 45,
             backgroundColor: ColorConstants.softBlue,
-            backgroundImage: AssetImage("assets/images/hazeer_lady.png"), // dummy
+            backgroundImage: user["avatar"] != null
+                ? NetworkImage(user["avatar"]) as ImageProvider
+                : const AssetImage("assets/images/hazeer_lady.png"),
           ),
           const SizedBox(height: 12),
           Text(
-            "Saniya",
+            user["name"] ?? "User",
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: ColorConstants.textPrimary,
             ),
           ),
           Text(
-            "saniya@example.com",
+            user["email"] ?? "",
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: ColorConstants.textSecondary,
             ),
           ),
           const SizedBox(height: 20),
 
-          // Options List
+          // Options
           _menuTile(Icons.history, "My Bookings", onTap: () {}),
           _menuTile(Icons.favorite_border, "Wishlist", onTap: () {}),
           _menuTile(Icons.help_outline, "Help & Support", onTap: () {}),
-          _menuTile(Icons.logout, "Logout", onTap: () {}),
+
+          // Logout
+          _menuTile(Icons.logout, "Logout", onTap: () {
+            ref.read(authControllerProvider).logout();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Logged out successfully")),
+            );
+          }),
         ],
       ),
     );
   }
 
-  // 🔹 Helper for menu items
+  // 🔹 Helper menu tile
   Widget _menuTile(IconData icon, String title, {VoidCallback? onTap}) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
